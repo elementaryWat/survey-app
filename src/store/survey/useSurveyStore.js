@@ -1,19 +1,33 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
     fetchSurveyDataAction,
 } from './asyncActions';
-import { selectAnswers, selectCurrentQuestion, selectQuestions } from './selectors';
-import { setCurrentQuestionAction, addAnswerAction, nextQuestionAction } from './actions';
+import { selectAnswers, selectCurrentQuestion, selectIsSurveyCompleted, selectIsSurveyStarted, selectQuestions } from './selectors';
+import { setCurrentQuestionAction, addAnswerAction, nextQuestionAction, startSurveyAction, completeSurveyAction } from './actions';
 
 export function useSurveyStore() {
     const dispatch = useDispatch();
     const currentQuestion = useSelector(selectCurrentQuestion);
+    const [countdownSeconds, setCountDownSeconds] = useState(-1);
+    const isSurveyStarted = useSelector(selectIsSurveyStarted);
+    const isSurveyCompleted = useSelector(selectIsSurveyCompleted);
     const questions = useSelector(selectQuestions);
     const answers = useSelector(selectAnswers);
 
+    useEffect(() => {
+        if (questions.length > 0) {
+            setCountDownSeconds(questions[currentQuestion].lifetimeSeconds)
+        }
+    }, [questions, currentQuestion])
+
     const fetchSurveyData = useCallback(
         () => dispatch(fetchSurveyDataAction()),
+        [dispatch]
+    );
+
+    const startSurvey = useCallback(
+        () => dispatch(startSurveyAction()),
         [dispatch]
     );
 
@@ -32,14 +46,23 @@ export function useSurveyStore() {
         [dispatch]
     );
 
+    const completeSurvey = useCallback(
+        () => dispatch(completeSurveyAction()),
+        [dispatch]
+    );
 
     return {
         questions,
         currentQuestion,
+        isSurveyStarted,
+        isSurveyCompleted,
+        countdownSeconds,
         answers,
         fetchSurveyData,
+        startSurvey,
         setCurrentQuestion,
         addAnswer,
-        nextQuestion
+        nextQuestion,
+        completeSurvey
     };
 }

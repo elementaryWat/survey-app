@@ -2,25 +2,31 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 import { Formik } from 'formik';
+import Countdown from '../CountDown';
 
-const SurveyForm = ({ nextQuestion, onSubmit, questions, currentQuestion }) => {
+const SurveyForm = ({ nextQuestion, onFinish, questions, currentQuestion, countdownSeconds }) => {
+    const handleOnComplete = (answer) => {
+        if (currentQuestion + 1 < questions.length) {
+            nextQuestion(answer);
+        } else {
+            onFinish(answer);
+        }
+    }
+
     return (
         <Container>
             <Formik
                 initialValues={{ answer: -1 }}
-                onSubmit={(values) => {
-                    onSubmit(values.answer);
-                }}
             >
                 {({
                     values,
                     handleChange,
-                    handleSubmit,
                     setFieldValue
                     /* and other goodies */
                 }) => (
-                    <form onSubmit={handleSubmit}>
+                    <form>
                         <Container>
+                            <Countdown seconds={countdownSeconds} currentQuestion={currentQuestion} onComplete={() => { handleOnComplete(values.answer); setFieldValue('answer', -1) }} />
                             <FormControl>
                                 <FormLabel id={`answers-label`}>{questions[currentQuestion].text}</FormLabel>
                                 <RadioGroup
@@ -31,7 +37,7 @@ const SurveyForm = ({ nextQuestion, onSubmit, questions, currentQuestion }) => {
                             </FormControl>
                         </Container>
                         <Button variant="contained" onClick={() => { nextQuestion(values.answer); setFieldValue('answer', -1) }} disabled={currentQuestion == questions.length - 1}>Next question</Button>
-                        <Button variant="contained" type='submit'>Submit</Button>
+                        <Button variant="contained" onClick={() => onFinish(values.answer)}>Finish Quiz</Button>
                     </form>
                 )}
             </Formik>
@@ -41,9 +47,10 @@ const SurveyForm = ({ nextQuestion, onSubmit, questions, currentQuestion }) => {
 
 SurveyForm.propTypes = {
     nextQuestion: PropTypes.func,
-    onSubmit: PropTypes.func,
+    onFinish: PropTypes.func,
     questions: PropTypes.array,
-    currentQuestion: PropTypes.number
+    currentQuestion: PropTypes.number,
+    countdownSeconds: PropTypes.number,
 }
 
 export default SurveyForm
