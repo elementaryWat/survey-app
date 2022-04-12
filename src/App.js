@@ -1,39 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import SurveyForm from './components/surveyForm';
+import { useSurveyStore } from './store/survey/useSurveyStore';
 
 function App() {
-	const [questions, setQuestions] = useState([]);
-	const [answers, setAnswers] = useState([]);
-	const [currentQuestion, setCurrentQuestion] = useState(0);
-	const getData = async () => {
-		try {
-			const response = await fetch('./data/sample.json'
-				, {
-					headers: {
-						'Content-Type': 'application/json',
-						'Accept': 'application/json'
-					}
-				})
-			return response.json()
-		} catch (err) {
-			return {}
-		}
-	}
+	const { questions, currentQuestion, answers, fetchSurveyData, nextQuestion } = useSurveyStore();
 
 	useEffect(() => {
-		async function fetchData() {
-			let data = await getData();
-			setQuestions(data?.questions);
-			console.log(data?.questions)
-		}
-		fetchData();
+		fetchSurveyData();
 	}, [])
 
-	const nextQuestion = (answer) => {
-		setCurrentQuestion(currentQuestion + 1)
-		setAnswers([...answers, answer])
-	}
 	const submit = async (answer) => {
 		console.log([...answers, answer]);
 	}
