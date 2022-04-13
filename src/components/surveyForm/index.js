@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
+import { Button, Container, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { Formik } from 'formik';
 import Countdown from '../CountDown';
 
@@ -14,21 +14,21 @@ const SurveyForm = ({ nextQuestion, onFinish, questions, currentQuestion, countd
     }
 
     return (
-        <Container>
-            <Formik
-                initialValues={{ answer: -1 }}
-            >
-                {({
-                    values,
-                    handleChange,
-                    setFieldValue
-                    /* and other goodies */
-                }) => (
-                    <form>
+        <Formik
+            initialValues={{ answer: -1 }}
+        >
+            {({
+                values,
+                handleChange,
+                setFieldValue
+                /* and other goodies */
+            }) => (
+                <form>
+                    <div className='survey-form'>
                         <Container>
                             <Countdown seconds={countdownSeconds} currentQuestion={currentQuestion} onComplete={() => { handleOnComplete(values.answer); setFieldValue('answer', -1) }} />
+                            <h3>{questions[currentQuestion].text}</h3>
                             <FormControl>
-                                <FormLabel id={`answers-label`}>{questions[currentQuestion].text}</FormLabel>
                                 <RadioGroup
                                     name={`answers-group`}
                                 >
@@ -36,12 +36,14 @@ const SurveyForm = ({ nextQuestion, onFinish, questions, currentQuestion, countd
                                 </RadioGroup>
                             </FormControl>
                         </Container>
-                        <Button variant="contained" onClick={() => { nextQuestion(values.answer); setFieldValue('answer', -1) }} disabled={currentQuestion == questions.length - 1}>Next question</Button>
-                        <Button variant="contained" onClick={() => onFinish(values.answer)}>Finish Quiz</Button>
-                    </form>
-                )}
-            </Formik>
-        </Container>
+                        {currentQuestion < questions.length - 1 && <Button variant="contained" onClick={() => { nextQuestion(values.answer); setFieldValue('answer', -1) }}>Next question</Button>}
+                        {currentQuestion == questions.length - 1 && <Button variant="contained" onClick={() => onFinish(values.answer)}>Finish Quiz</Button>}
+                    </div>
+
+                </form>
+            )}
+        </Formik>
+
     )
 }
 

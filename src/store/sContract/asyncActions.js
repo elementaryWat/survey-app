@@ -1,4 +1,4 @@
-import { loadBalanceAction, loadBalanceErrorAction, setConnectedToRopstenAction, setSurveyContractAction } from "./actions";
+import { loadBalanceAction, loadErrorAction, setConnectedToRopstenAction, setSurveyContractAction } from "./actions";
 import { selectSurveyContract } from "./selectors";
 import { SURVEY_ABI, TOKEN_ADDRESS } from "./consts";
 import { selectAnswers } from "../survey/selectors";
@@ -42,7 +42,7 @@ export function fetchAccountBalanceAction() {
             const adjustedBalance = walletBalance * 10 ** -decimals
             dispatch(loadBalanceAction(adjustedBalance));
         } catch (err) {
-            dispatch(loadBalanceErrorAction());
+            dispatch(loadErrorAction());
         }
     }
 }
@@ -52,16 +52,17 @@ export function submitAnswersToValidatorAction() {
         try {
             const state = getState();
             const surveyContract = selectSurveyContract(state);
-            const answers = selectAnswers(state);
+            // Replace no answered items for default in order to avoid error
+            const answers = selectAnswers(state).map(answer => (answer !== -1 ? answer : 0));
             const accounts = await (web3.eth)?.getAccounts();
-            await surveyContract.methods.submit(13, answers).send({
+            await surveyContract.methods.submit(14, answers).send({
                 from: accounts[0]
             }).on('confirmation', async function () {
                 dispatch(fetchAccountBalanceAction());
             })
 
         } catch (err) {
-            dispatch(loadBalanceErrorAction());
+            dispatch(loadErrorAction());
         }
     }
 }

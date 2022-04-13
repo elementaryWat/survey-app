@@ -1,10 +1,11 @@
-import ACTIONS from './consts';
+import ACTIONS, { DEFAULT_ERROR_MSG } from './consts';
 
 const initialState = {
 	surveyContract: null,
 	connectedToRopsten: false,
 	balance: 0,
-	error: false
+	error: false,
+	errorMsg: DEFAULT_ERROR_MSG,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -22,8 +23,8 @@ export default (state = initialState, { type, payload }) => {
 		case ACTIONS.LOAD_BALANCE:
 			return { ...state, balance: payload };
 
-		case ACTIONS.LOAD_BALANCE_ERROR:
-			return { ...state, error: true };
+		case ACTIONS.LOAD_ERROR:
+			return { ...state, error: true, errorMsg: payload || DEFAULT_ERROR_MSG };
 
 		default:
 			return state;

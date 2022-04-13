@@ -1,15 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Container } from '@mui/material'
+import { Button } from '@mui/material'
 
 const SummaryAnswers = ({ questions, answers, onSubmit }) => {
     return (
-        <Container>
-            {questions.map((question, i) =>
-                <li key={i}>{question.text} : {question.options[answers[i]].text}</li>
+        <div className='container'>
+            {questions.map((question, i) => {
+                return (answers[i] !== -1) ? <ul key={i}>{question.text} : {question.options[answers[i]].text}</ul> : <p>{question.text}: Sin respuesta</p>
+            }
             )}
             <Button variant="contained" onClick={onSubmit}>Send Quiz</Button>
-        </Container>
+        </div>
     )
 }
 

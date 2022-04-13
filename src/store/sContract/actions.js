@@ -15,6 +15,7 @@ export const loadBalanceAction = (questions) => ({
   payload: questions
 });
 
-export const loadBalanceErrorAction = () => ({
-  type: ACTIONS.LOAD_BALANCE_ERROR,
+export const loadErrorAction = (errorMsg) => ({
+  type: ACTIONS.LOAD_ERROR,
+  payload: errorMsg
 });

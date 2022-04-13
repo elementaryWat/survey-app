@@ -2,9 +2,10 @@ const ACTIONS = {
     SET_CONNECTED_TO_ROPSTEN: 'Set Connected To Ropsten',
     SET_SURVEY_CONTRACT: 'Set Survey Contract',
     LOAD_BALANCE: 'Load Balance',
-    LOAD_BALANCE_ERROR: 'Load Balance Error',
+    LOAD_ERROR: 'Load Balance Error',
 };
 export default ACTIONS;
+export const DEFAULT_ERROR_MSG = 'An error has ocurred sending the transaction! Try again';
 
 export const TOKEN_ADDRESS = '0x74F0B668Ea3053052DEAa5Eedd1815f579f0Ee03';
 export const SURVEY_ABI = [

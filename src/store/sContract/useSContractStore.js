@@ -3,12 +3,14 @@ import { useCallback, useEffect } from 'react';
 import {
     connectToSurveyContractAction, fetchAccountBalanceAction, fetchStatusConnectionToRopstenAction, submitAnswersToValidatorAction,
 } from './asyncActions';
-import { selectBalance, selectIsConnectedToRopsten } from './selectors';
+import { selectBalance, selectError, selectErrorMsg, selectIsConnectedToRopsten } from './selectors';
 
 export function useSContractStore() {
     const dispatch = useDispatch();
     const isConnectedToRopsten = useSelector(selectIsConnectedToRopsten);
     const balance = useSelector(selectBalance);
+    const error = useSelector(selectError);
+    const errorMsg = useSelector(selectErrorMsg);
 
     useEffect(() => {
         fetchConnectionToRopsten()
@@ -42,6 +44,8 @@ export function useSContractStore() {
 
     return {
         balance,
+        error,
+        errorMsg,
         isConnectedToRopsten,
         connectToSurveyContract,
         fetchAccountBalance,
