@@ -1,8 +1,24 @@
-import { loadBalanceAction, loadBalanceErrorAction, setSurveyContractAction } from "./actions";
+import { loadBalanceAction, loadBalanceErrorAction, setConnectedToRopstenAction, setSurveyContractAction } from "./actions";
 import { selectSurveyContract } from "./selectors";
 import { SURVEY_ABI, TOKEN_ADDRESS } from "./consts";
 import { selectAnswers } from "../survey/selectors";
-import web3 from './web3';
+import web3, { hasWeb3Provider } from './web3';
+
+export function fetchStatusConnectionToRopstenAction() {
+    return async dispatch => {
+        try {
+            if (hasWeb3Provider()) {
+                let networkType = await web3.eth.net.getNetworkType();
+                if (networkType === 'ropsten') {
+                    return dispatch(setConnectedToRopstenAction(true));
+                }
+            }
+            dispatch(setConnectedToRopstenAction(false));
+        } catch (err) {
+            dispatch(setConnectedToRopstenAction(false));
+        }
+    }
+}
 
 export function connectToSurveyContractAction() {
     return async dispatch => {

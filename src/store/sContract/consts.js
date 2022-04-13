@@ -1,4 +1,5 @@
 const ACTIONS = {
+    SET_CONNECTED_TO_ROPSTEN: 'Set Connected To Ropsten',
     SET_SURVEY_CONTRACT: 'Set Survey Contract',
     LOAD_BALANCE: 'Load Balance',
     LOAD_BALANCE_ERROR: 'Load Balance Error',
