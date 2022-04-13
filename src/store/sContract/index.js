@@ -1,7 +1,6 @@
 import ACTIONS from './consts';
 
 const initialState = {
-	web3Instance: null,
 	surveyContract: null,
 	connectedToRopsten: false,
 	balance: 0,

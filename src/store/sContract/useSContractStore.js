@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useCallback, useEffect } from 'react';
 import {
-    connectToRemoteRopstenAction,
-    fetchAccountBalanceAction, fetchStatusConnectionToRopstenAction,
+    connectToSurveyContractAction, fetchAccountBalanceAction, submitAnswersToValidatorAction,
 } from './asyncActions';
 import { selectBalance, selectIsConnectedToRopsten } from './selectors';
 
@@ -12,16 +11,11 @@ export function useSContractStore() {
     const balance = useSelector(selectBalance);
 
     useEffect(() => {
-        fetchConnectionToRopsten()
+        connectToSurveyContract()
     }, [])
 
-    const fetchConnectionToRopsten = useCallback(
-        () => dispatch(fetchStatusConnectionToRopstenAction()),
-        [dispatch]
-    );
-
-    const connectToRopsten = useCallback(
-        () => dispatch(connectToRemoteRopstenAction()),
+    const connectToSurveyContract = useCallback(
+        () => dispatch(connectToSurveyContractAction()),
         [dispatch]
     );
 
@@ -30,11 +24,16 @@ export function useSContractStore() {
         [dispatch]
     );
 
+    const submitAnswersToValidator = useCallback(
+        () => dispatch(submitAnswersToValidatorAction()),
+        [dispatch]
+    );
+
     return {
         balance,
         isConnectedToRopsten,
-        connectToRopsten,
-        fetchConnectionToRopsten,
+        connectToSurveyContract,
         fetchAccountBalance,
+        submitAnswersToValidator
     };
 }

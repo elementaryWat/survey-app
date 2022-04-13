@@ -9,25 +9,16 @@ import SummaryAnswers from './components/SummaryAnswers';
 
 function App() {
 	const { questions, currentQuestion, answers, isSurveyStarted, isSurveyCompleted, countdownSeconds, fetchSurveyData, startSurvey, nextQuestion, addAnswer, completeSurvey } = useSurveyStore();
-	const { balance, isConnectedToRopsten, fetchAccountBalance, connectToRopsten } = useSContractStore();
+	const { balance, fetchAccountBalance, submitAnswersToValidator } = useSContractStore();
 
 	useEffect(() => {
 		fetchSurveyData();
+		fetchAccountBalance();
 	}, [])
-
-	useEffect(() => {
-		if (isConnectedToRopsten) {
-			fetchAccountBalance();
-		}
-	}, [isConnectedToRopsten])
 
 	const onFinish = (answer) => {
 		addAnswer(answer)
 		completeSurvey()
-	}
-
-	const submit = () => {
-		console.log(answers);
 	}
 
 	return (
@@ -35,15 +26,10 @@ function App() {
 			<p>
 				The current balance is {balance}
 			</p>
-			{!isConnectedToRopsten && <Button variant="contained" onClick={async () => { await connectToRopsten() }}>Connect to ropsten</Button>}
-			{
-				isConnectedToRopsten && <div>
-					{!isSurveyStarted && <Button variant="contained" onClick={() => startSurvey(true)}>Start Survey</Button>}
-					{isSurveyCompleted && <SummaryAnswers questions={questions} answers={answers} onSubmit={submit} />
-					}
-					{(questions.length > 0 & isSurveyStarted & !isSurveyCompleted) && <SurveyForm nextQuestion={nextQuestion} onFinish={onFinish} onSubmit={submit} questions={questions} currentQuestion={currentQuestion} countdownSeconds={countdownSeconds} />}
-				</div>
+			{!isSurveyStarted && <Button variant="contained" onClick={() => startSurvey(true)}>Start Survey</Button>}
+			{isSurveyCompleted && <SummaryAnswers questions={questions} answers={answers} onSubmit={async () => { await submitAnswersToValidator() }} />
 			}
+			{(questions.length > 0 && isSurveyStarted && !isSurveyCompleted) && <SurveyForm nextQuestion={nextQuestion} onFinish={onFinish} questions={questions} currentQuestion={currentQuestion} countdownSeconds={countdownSeconds} />}
 		</div>
 	);
 }
