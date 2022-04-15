@@ -8,6 +8,11 @@ export const completeSurveyAction = () => ({
   type: ACTIONS.COMPLETE_SURVEY,
 });
 
+export const loadInfoSurveyAction = (info) => ({
+  type: ACTIONS.LOAD_INFO_SURVEY,
+  payload: info
+});
+
 export const loadQuestionsAction = (questions) => ({
   type: ACTIONS.LOAD_QUESTIONS,
   payload: questions

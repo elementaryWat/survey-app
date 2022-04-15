@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
 import './App.css';
-import SurveyForm from './components/SurveyForm';
 import { useSurveyStore } from './store/survey/useSurveyStore';
 import { useSContractStore } from './store/sContract/useSContractStore';
-import { Alert, Button, CircularProgress } from '@mui/material'
-import SummaryAnswers from './components/SummaryAnswers';
+import { Alert, CircularProgress } from '@mui/material'
+import SurveyContainer from './screens/SurveyContainer';
 
 
 function App() {
-	const { questions, currentQuestion, answers, isSurveyStarted, isSurveyCompleted, countdownSeconds, fetchSurveyData, startSurvey, nextQuestion, addAnswer, completeSurvey } = useSurveyStore();
-	const { balance, isLoading, isLoadingBalance, success, successMsg, error, errorMsg, isConnectedToRopsten, hideError, hideSuccess, fetchAccountBalance, submitAnswersToValidator } = useSContractStore();
+	const { fetchSurveyData } = useSurveyStore();
+	const { balance, isLoadingBalance, isConnectedToRopsten, fetchAccountBalance } = useSContractStore();
 
 	useEffect(() => {
 		fetchSurveyData();
@@ -21,10 +20,7 @@ function App() {
 		}
 	}, [isConnectedToRopsten])
 
-	const onFinish = (answer) => {
-		addAnswer(answer)
-		completeSurvey()
-	}
+
 
 	return (
 		<div className='main-content'>
@@ -35,14 +31,7 @@ function App() {
 						{isLoadingBalance ? <span><CircularProgress /> Loading Balance</span> : `Your current balance is ${balance} QUIZ`}
 
 					</div>
-					<div className='survey-container'>
-						{!isSurveyStarted && <Button variant="contained" onClick={() => startSurvey(true)}>Start Survey</Button>}
-						{(questions.length > 0 && isSurveyStarted && !isSurveyCompleted) && <SurveyForm nextQuestion={nextQuestion} onFinish={onFinish} questions={questions} currentQuestion={currentQuestion} countdownSeconds={countdownSeconds} />}
-						{isSurveyCompleted && <SummaryAnswers questions={questions} answers={answers} onSubmit={async () => await submitAnswersToValidator()} loading={isLoading} />}
-						{error && <Alert className='alert' severity="error" onClose={hideError}>{errorMsg}</Alert>}
-						{success && <Alert className='alert' onClose={hideSuccess}>{successMsg}</Alert>}
-					</div>
-
+					<SurveyContainer />
 				</div>
 			}
 		</div>

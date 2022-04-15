@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import {
     fetchSurveyDataAction,
 } from './asyncActions';
-import { selectAnswers, selectCurrentQuestion, selectIsSurveyCompleted, selectIsSurveyStarted, selectQuestions } from './selectors';
+import { selectAnswers, selectCurrentQuestion, selectImage, selectIsSurveyCompleted, selectIsSurveyStarted, selectQuestions, selectTitle } from './selectors';
 import { setCurrentQuestionAction, addAnswerAction, nextQuestionAction, startSurveyAction, completeSurveyAction } from './actions';
 
 export function useSurveyStore() {
@@ -12,6 +12,8 @@ export function useSurveyStore() {
     const [countdownSeconds, setCountDownSeconds] = useState(-1);
     const isSurveyStarted = useSelector(selectIsSurveyStarted);
     const isSurveyCompleted = useSelector(selectIsSurveyCompleted);
+    const title = useSelector(selectTitle);
+    const image = useSelector(selectImage);
     const questions = useSelector(selectQuestions);
     const answers = useSelector(selectAnswers);
 
@@ -52,6 +54,8 @@ export function useSurveyStore() {
     );
 
     return {
+        title,
+        image,
         questions,
         currentQuestion,
         isSurveyStarted,

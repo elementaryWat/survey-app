@@ -35,6 +35,11 @@
   color: white;
 }
 
+img {
+  margin: '0 2px';
+  width: 30px;
+}
+
 .alert {
   margin-top: 1rem;
   margin-bottom: 1rem;

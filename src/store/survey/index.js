@@ -2,6 +2,7 @@ import ACTIONS from './consts';
 
 const initialState = {
 	started: false,
+	info: [],
 	questions: [],
 	currentQuestion: 0,
 	answers: [],
@@ -13,6 +14,9 @@ export default (state = initialState, { type, payload }) => {
 	switch (type) {
 		case ACTIONS.START_SURVEY:
 			return { ...state, started: true };
+
+		case ACTIONS.LOAD_INFO_SURVEY:
+			return { ...state, info: payload };
 
 		case ACTIONS.LOAD_QUESTIONS:
 			return { ...state, questions: payload };
