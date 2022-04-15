@@ -1,10 +1,16 @@
 const ACTIONS = {
     SET_CONNECTED_TO_ROPSTEN: 'Set Connected To Ropsten',
     SET_SURVEY_CONTRACT: 'Set Survey Contract',
+    SET_LOADING: 'Set Loading',
+    SET_LOADING_BALANCE: 'Set Loading Balance',
     LOAD_BALANCE: 'Load Balance',
-    LOAD_ERROR: 'Load Balance Error',
+    LOAD_ERROR: 'Load Error',
+    HIDE_ERROR: 'Hide Error',
+    LOAD_SUCCESS: 'Load Success',
+    HIDE_SUCCESS: 'Hide Success',
 };
 export default ACTIONS;
+export const DEFAULT_SUCCESS_MSG = 'The transaction was executed successfully';
 export const DEFAULT_ERROR_MSG = 'An error has ocurred sending the transaction! Try again';
 
 export const TOKEN_ADDRESS = '0x74F0B668Ea3053052DEAa5Eedd1815f579f0Ee03';

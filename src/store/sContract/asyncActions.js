@@ -1,4 +1,4 @@
-import { loadBalanceAction, loadErrorAction, setConnectedToRopstenAction, setSurveyContractAction } from "./actions";
+import { loadBalanceAction, loadErrorAction, loadSuccessAction, setConnectedToRopstenAction, setLoadingAction, setLoadingBalanceAction, setSurveyContractAction } from "./actions";
 import { selectSurveyContract } from "./selectors";
 import { SURVEY_ABI, TOKEN_ADDRESS } from "./consts";
 import { selectAnswers } from "../survey/selectors";
@@ -34,6 +34,7 @@ export function connectToSurveyContractAction() {
 export function fetchAccountBalanceAction() {
     return async (dispatch, getState) => {
         try {
+            dispatch(setLoadingBalanceAction(true));
             const state = getState();
             const surveyContract = selectSurveyContract(state);
             const accounts = await (web3.eth)?.getAccounts();
@@ -41,8 +42,10 @@ export function fetchAccountBalanceAction() {
             const decimals = await surveyContract.methods.decimals().call();
             const adjustedBalance = walletBalance * 10 ** -decimals
             dispatch(loadBalanceAction(adjustedBalance));
+            dispatch(setLoadingBalanceAction(false));
         } catch (err) {
             dispatch(loadErrorAction());
+            dispatch(setLoadingBalanceAction(false));
         }
     }
 }
@@ -50,6 +53,7 @@ export function fetchAccountBalanceAction() {
 export function submitAnswersToValidatorAction() {
     return async (dispatch, getState) => {
         try {
+            dispatch(setLoadingAction(true));
             const state = getState();
             const surveyContract = selectSurveyContract(state);
             // Replace no answered items for default in order to avoid error
@@ -58,10 +62,13 @@ export function submitAnswersToValidatorAction() {
             await surveyContract.methods.submit(14, answers).send({
                 from: accounts[0]
             }).on('confirmation', async function () {
+                dispatch(loadSuccessAction());
+                dispatch(setLoadingAction(false));
                 dispatch(fetchAccountBalanceAction());
             })
 
         } catch (err) {
+            dispatch(setLoadingAction(false));
             dispatch(loadErrorAction());
         }
     }
