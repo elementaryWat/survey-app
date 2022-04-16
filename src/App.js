@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import './App.css';
 import { useSurveyStore } from './store/survey/useSurveyStore';
 import { useSContractStore } from './store/sContract/useSContractStore';
 import { Alert, CircularProgress } from '@mui/material'
 import SurveyContainer from './screens/SurveyContainer';
+import { BalanceContainer, MainContainer } from './styled';
+import FlexContainer from './components/shared/FlexContainer';
 
 
 function App() {
@@ -23,18 +24,17 @@ function App() {
 
 
 	return (
-		<div className='main-content'>
+		<MainContainer>
 			{!isConnectedToRopsten && <Alert severity="info">First install Metamask and connect to Ropsten to use the app</Alert>}
 			{
-				isConnectedToRopsten && <div className='container'>
-					<div className='header'>
+				isConnectedToRopsten && <FlexContainer>
+					<BalanceContainer>
 						{isLoadingBalance ? <span><CircularProgress /> Loading Balance</span> : `Your current balance is ${balance} QUIZ`}
-
-					</div>
+					</BalanceContainer>
 					<SurveyContainer />
-				</div>
+				</FlexContainer>
 			}
-		</div>
+		</MainContainer>
 	);
 }
 

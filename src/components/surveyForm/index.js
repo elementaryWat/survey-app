@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Button, Container, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { Formik } from 'formik';
 import Countdown from '../CountDown';
+import { SurveyFormContainer } from './styled';
 
 const SurveyForm = ({ nextQuestion, onFinish, questions, currentQuestion, countdownSeconds }) => {
     const handleOnComplete = (answer) => {
@@ -24,7 +25,7 @@ const SurveyForm = ({ nextQuestion, onFinish, questions, currentQuestion, countd
                 /* and other goodies */
             }) => (
                 <form>
-                    <div className='survey-form'>
+                    <SurveyFormContainer>
                         <Container>
                             <Countdown seconds={countdownSeconds} currentQuestion={currentQuestion} onComplete={() => { handleOnComplete(values.answer); setFieldValue('answer', -1) }} />
                             <h3>{questions[currentQuestion].text}</h3>
@@ -38,7 +39,7 @@ const SurveyForm = ({ nextQuestion, onFinish, questions, currentQuestion, countd
                         </Container>
                         {currentQuestion < questions.length - 1 && <Button variant="contained" onClick={() => { nextQuestion(values.answer); setFieldValue('answer', -1) }}>Next question</Button>}
                         {currentQuestion == questions.length - 1 && <Button variant="contained" onClick={() => onFinish(values.answer)}>Finish Quiz</Button>}
-                    </div>
+                    </SurveyFormContainer>
 
                 </form>
             )}
