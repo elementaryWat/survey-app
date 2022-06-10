@@ -17,6 +17,7 @@ dApp to gain QUIZ token when answering surveys
 
 This section should list any major frameworks/libraries used to bootstrap your project
 * [React.js](https://reactjs.org/)
+* [Web3.js](https://web3js.readthedocs.io/en/v1.7.3/)
 * [Material UI](https://mui.com/)
 * [Styled Components](https://styled-components.com/)
 * [Formik](https://formik.org/)
